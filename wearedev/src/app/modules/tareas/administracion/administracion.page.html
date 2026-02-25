@@ -1,0 +1,129 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Mis Tareas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="prepararCreacion()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  @if (tareasUrgentes.length > 0) {
+  <ion-card color="warning">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        Próximas a vencer (24h)
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Tienes {{ tareasUrgentes.length }} tareas que requieren atención
+      inmediata.
+    </ion-card-content>
+  </ion-card>
+  }
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Lista General</ion-label>
+    </ion-list-header>
+    @for (tarea of tareasActivas; track tarea.id) {
+    <ion-item [class.urgente-item]="esUrgente(tarea.id)">
+      <ion-label>
+        <h2 [style.font-weight]="esUrgente(tarea.id) ? 'bold' : 'normal'">
+          {{ tarea.titulo }} @if(esUrgente(tarea.id)){
+          <ion-badge color="danger">URGENTE</ion-badge>
+          }
+        </h2>
+        <p>{{ tarea.descripcion }}</p>
+        <small
+          >Vence: {{ tarea.fechaVencimiento | date:'dd/MM/yyyy HH:mm' }}</small
+        >
+      </ion-label>
+
+      <ion-buttons slot="end">
+        <ion-button color="primary" (click)="prepararEdicion(tarea)">
+          <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button color="danger" (click)="eliminarTarea(tarea.id)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    }@empty {
+    <p class="ion-text-center">No hay tareas pendientes.</p>
+    }
+  </ion-list>
+
+  <ion-modal
+    [isOpen]="estaModalAbierto"
+    (didDismiss)="estaModalAbierto = false"
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Editar Tarea</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="estaModalAbierto = false">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      @if(tareaEnEdicion){
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-label position="stacked">Título</ion-label>
+          <ion-input [(ngModel)]="tareaEnEdicion.titulo"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Descripción</ion-label>
+          <ion-input [(ngModel)]="tareaEnEdicion.descripcion"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Estado</ion-label>
+          <ion-select [(ngModel)]="tareaEnEdicion.estado">
+            <ion-select-option value="Pendiente">Pendiente</ion-select-option>
+            <ion-select-option value="Completada">Completada</ion-select-option>
+            <ion-select-option value="Pospuesta">Pospuesta</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Nueva Fecha de Vencimiento</ion-label>
+          <ion-datetime-button datetime="fecha-edit"></ion-datetime-button>
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          class="ion-margin-top"
+          (click)="guardarCambios()"
+        >
+          Guardar Cambios
+        </ion-button>
+
+        <div class="ion-margin-top" style="font-size: 0.8em; color: gray">
+          <p>Creado: {{ tareaEnEdicion.fechaCreacion | date:'medium' }}</p>
+          @if(tareaEnEdicion.fechaModificacion){
+          <p>
+            Último cambio: {{ tareaEnEdicion.fechaModificacion | date:'medium'
+            }}
+          </p>
+          }
+        </div>
+      </ion-content>
+      }
+
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime
+            id="fecha-edit"
+            [(ngModel)]="tareaEnEdicion!.fechaVencimiento"
+          ></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ng-template>
+  </ion-modal>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "wearedev",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

@@ -1,0 +1,10 @@
+.urgente-item {
+  --border-color: var(--ion-color-danger);
+  --border-style: solid;
+  --border-width: 0 0 0 6px;
+  background: rgba(var(--ion-color-warning-rgb), 0.1);
+}
+
+ion-badge {
+  margin-left: 10px;
+}
