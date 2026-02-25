@@ -23,5 +23,5 @@ y cumple con los requisitos de guardar, eliminar y listar datos de manera local 
 - La APK de la aplicación va a estar en la raiz del proyecto con el nombre 
 - app-debug.apk
 ## Evidencias de modulo funcional
-![Editar tareas](screens/editar tareas.pn)
+![Editar tareas](https://github.com/bpabon/ionic-angular/blob/main/screens/editar%20tareas.png)
 ![Lista tarea](https://github.com/bpabon/ionic-angular/blob/main/screens/Listado%20de%20tareas.png)
